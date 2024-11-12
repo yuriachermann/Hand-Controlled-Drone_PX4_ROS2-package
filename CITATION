@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software in an academic context, please cite it as below."
+authors:
+- family-names: "Achermann"
+  given-names: "Yuri"
+  orcid: "https://orcid.org/0009-0002-0728-9153"
+title: "px4-offboard-hand-control"
+version: v1.0
+date-released: 2024-11-15
+url: "https://github.com/yuriachermann/Hand-Controlled-PX4-Drone"
