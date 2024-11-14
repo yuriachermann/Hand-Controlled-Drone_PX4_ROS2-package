@@ -209,10 +209,7 @@ The controls are as follows:
 * Turn Hand Left:     Roll Right
 
 <a href="https://website.com">
-  <img src="https://i.imgur.com/JfwmobZ.gif" alt="Logo" width="576" height="324">
-</a>
-<a href="https://website.com">
-  <img src="https://i.imgur.com/21fQdYz.gif" alt="Logo" width="576" height="324">
+  <img src="https://github.com/user-attachments/assets/5a81a16d-5c6e-4512-9350-b9b4018e73a3" alt="Logo" width="576" height="324">
 </a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
