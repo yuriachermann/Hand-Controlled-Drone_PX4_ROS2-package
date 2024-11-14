@@ -208,8 +208,7 @@ The controls are as follows:
 * Turn Hand Left:     Roll Left
 * Turn Hand Left:     Roll Right
 
-![Image 1](data/images/view1.png)
-![Image 2](data/images/view2.png)
+![Demo](https://i.imgur.com/lTgzHUd.gif)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
