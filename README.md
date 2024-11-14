@@ -209,6 +209,8 @@ The controls are as follows:
 * Turn Hand Left:     Roll Right
 
 ![Demo](https://i.imgur.com/lTgzHUd.gif)
+![Demo](https://i.imgur.com/21fQdYz.gif)
+![Demo](https://github.com/user-attachments/assets/5a81a16d-5c6e-4512-9350-b9b4018e73a3)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
