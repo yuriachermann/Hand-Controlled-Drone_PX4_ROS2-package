@@ -33,8 +33,11 @@ class MyListener(leap.Listener):
     def __init__(self, pub):
         super().__init__()
         self.pub = pub
-        self.z_mid = 250.0
-        self.linear_threshold_1 = 50.0
+        self.linear_z_mid =   250.0
+        self.angular_x_mid = -5.0
+        self.angular_y_mid =  5.0
+        self.angular_z_mid =  0.0
+        self.linear_threshold_1 =  50.0
         self.linear_threshold_2 = 150.0
         self.angular_threshold_1 = 10.0
         self.angular_threshold_2 = 20.0
@@ -53,56 +56,60 @@ class MyListener(leap.Listener):
         print(f"Found device {info.serial}")
     
     def on_tracking_event(self, event):
-        # print("Tracking event received")
         twist = geometry_msgs.msg.Twist()
 
         for hand in event.hands:
             if str(hand.type) == "HandType.Right":
                 
+                position_y    = hand.palm.position.y - self.linear_z_mid
+                orientation_x = hand.palm.orientation.x * RAD_TO_DEG - self.angular_x_mid
+                orientation_y = hand.palm.orientation.y * RAD_TO_DEG - self.angular_y_mid
+                orientation_z = hand.palm.orientation.z * RAD_TO_DEG - self.angular_z_mid
+                
                 # Throttle Up/Down movements
-                if   (self.z_mid + self.linear_threshold_2 < hand.palm.position.y):                                         # Up x2
-                    twist.linear.z = +2.0   # Up x2
-                elif (self.z_mid + self.linear_threshold_1 < hand.palm.position.y < self.z_mid + self.linear_threshold_2):  # Up x1
-                    twist.linear.z = +1.0   # Up x1
-                elif (self.z_mid - self.linear_threshold_1 < hand.palm.position.y < self.z_mid + self.linear_threshold_1):  # Neutral
-                    twist.linear.z =  0.0   # Neutral
-                elif                                        (hand.palm.position.y < self.z_mid - self.linear_threshold_1):  # Down x1
-                    twist.linear.z = -1.0   # Down
+                if   (position_y >  self.linear_threshold_2):
+                    twist.linear.z = +2.0  # Up x2
+                elif (position_y >  self.linear_threshold_1):
+                    twist.linear.z = +1.0  # Up x1
+                elif (position_y > -self.linear_threshold_1):
+                    twist.linear.z =  0.0  # Neutral
+                else:
+                    twist.linear.z = -1.0  # Down x1
 
                 # Pitch Forward/Backward movements
-                if                               hand.palm.orientation.x * RAD_TO_DEG + 5 < -self.angular_threshold_2:      # Forward x2
-                    twist.linear.y = +2.0   # Forward x2
-                elif -self.angular_threshold_2 < hand.palm.orientation.x * RAD_TO_DEG + 5 < -self.angular_threshold_1:      # Forward x1
-                    twist.linear.y = +1.0   # Forward x1
-                elif -self.angular_threshold_1 < hand.palm.orientation.x * RAD_TO_DEG + 5 < self.angular_threshold_1:       # Neutral
-                    twist.linear.y =  0.0   # Neutral
-                elif  self.angular_threshold_1 < hand.palm.orientation.x * RAD_TO_DEG + 5 < self.angular_threshold_2:       # Backward x1
-                    twist.linear.y = -1.0   # Backward x1
-                elif  self.angular_threshold_2 < hand.palm.orientation.x * RAD_TO_DEG + 5:                                  # Backward x2
-                    twist.linear.y = -2.0   # Backward x2
-                    
-                # Roll Left/Right movements
-                if    (self.angular_threshold_2 < hand.palm.orientation.z * RAD_TO_DEG):                                    # Left x2
-                    twist.linear.x = +2.0   # Left x2
-                elif  (self.angular_threshold_1 < hand.palm.orientation.z * RAD_TO_DEG <  self.angular_threshold_2):        # Left x1
-                    twist.linear.x = +1.0   # Left x1
-                elif (-self.angular_threshold_1 < hand.palm.orientation.z * RAD_TO_DEG <  self.angular_threshold_1):        # Neutral
-                    twist.linear.x =  0.0   # Neutral
-                elif (-self.angular_threshold_2 < hand.palm.orientation.z * RAD_TO_DEG < -self.angular_threshold_1):        # Right x1
-                    twist.linear.x = -1.0   # Right x1
-                elif                             (hand.palm.orientation.z * RAD_TO_DEG < -self.angular_threshold_2):        # Right x2
-                    twist.linear.x = -2.0   # Right x2
+                if   (orientation_x < -self.angular_threshold_2):
+                    twist.linear.y = +2.0  # Forward x2
+                elif (orientation_x < -self.angular_threshold_1):
+                    twist.linear.y = +1.0  # Forward x1
+                elif (orientation_x <  self.angular_threshold_1):
+                    twist.linear.y =  0.0  # Neutral
+                elif (orientation_x <  self.angular_threshold_2):
+                    twist.linear.y = -1.0  # Backward x1
+                else:
+                    twist.linear.y = -2.0  # Backward x2
 
-                # Yaw Left/Right movements
-                if                               (hand.palm.orientation.y * RAD_TO_DEG - 5 < -self.angular_threshold_2):    # Rotate CW x2
+                # Roll Left/Right movements
+                if   (orientation_z >  self.angular_threshold_2):
+                    twist.linear.x = +2.0  # Left x2
+                elif (orientation_z >  self.angular_threshold_1):
+                    twist.linear.x = +1.0  # Left x1
+                elif (orientation_z > -self.angular_threshold_1):
+                    twist.linear.x =  0.0  # Neutral
+                elif (orientation_z > -self.angular_threshold_2):
+                    twist.linear.x = -1.0  # Right x1
+                else:
+                    twist.linear.x = -2.0  # Right x2
+
+                # Yaw CW/CCW movements
+                if   (orientation_y < -self.angular_threshold_2):
                     twist.angular.z = +1.0  # Rotate CW x2
-                elif (-self.angular_threshold_2 < hand.palm.orientation.y * RAD_TO_DEG - 5 < -self.angular_threshold_1):    # Rotate CW x1
+                elif (orientation_y < -self.angular_threshold_1):
                     twist.angular.z = +0.5  # Rotate CW x1
-                elif (-self.angular_threshold_1 < hand.palm.orientation.y * RAD_TO_DEG - 5 <  self.angular_threshold_1):    # Neutral
+                elif (orientation_y <  self.angular_threshold_1):
                     twist.angular.z =  0.0  # Neutral
-                elif  (self.angular_threshold_1 < hand.palm.orientation.y * RAD_TO_DEG - 5 <  self.angular_threshold_2):    # Rotate CCW x1
+                elif (orientation_y <  self.angular_threshold_2):
                     twist.angular.z = -0.5  # Rotate CCW x1
-                elif  (self.angular_threshold_2 < hand.palm.orientation.y * RAD_TO_DEG - 5):                                # Rotate CCW x2
+                else:
                     twist.angular.z = -1.0  # Rotate CCW x2
 
                 # print(f"Position - \t x:{hand.palm.position.x: .4f} \t y:{hand.palm.position.y: .4f} \t z:{hand.palm.position.z: .4f}")
@@ -120,7 +127,10 @@ class MyListener(leap.Listener):
         if self.twist_changed(twist):
             self.pub.publish(twist)
             self.last_twist = twist
-            print(f"X:{twist.linear.x: .1f} Y:{twist.linear.y: .1f} Z:{twist.linear.z: .1f} Yaw:{twist.angular.z: .1f}")
+            print(f"X:{twist.linear.x: .1f} \
+                    Y:{twist.linear.y: .1f} \
+                    Z:{twist.linear.z: .1f} \
+                    Yaw:{twist.angular.z: .1f}")
 
     def twist_changed(self, new_twist):
         return (
