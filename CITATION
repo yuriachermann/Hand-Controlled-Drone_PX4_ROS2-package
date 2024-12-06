@@ -1,10 +1,16 @@
 cff-version: 1.2.0
 message: "If you use this software in an academic context, please cite it as below."
+title: "A Framework to Enable Human-Drone Interaction Through Natural Gesture Control"
+abstract: "Recent advances in drone technology and human-computer interaction have created new possibilities for controlling unmanned aerial vehicles (UAVs). Traditional drone control methods often require both hands and complex remote controllers, which can limit accessibility for users with physical limitations. This manuscript presents the development of a framework that enables drone control through natural hand gestures, using a Leap Motion Controller for gesture recognition and the PX4 flight stack for drone operation. Current drone control interfaces rely heavily on two-handed operation, creating barriers for users with limited mobility or those requiring simpler control methods. The challenge lies in creating an intuitive, reliable system that can accurately translate hand movements into precise drone commands. The development of gesture-based control systems for drones can increase accessibility and simplify human-drone interaction, potentially benefiting various fields such as search and rescue operations, industrial inspection, and recreational use. This research aims to document the decision processes in developing and validating a framework for gesture-based drone control that enables single-handed operation in a Software-In-The-Loop environment. The study follows an adapted version of NASA Systems Engineering Handbook procedures, focusing on requirements definition and preliminary design phases. The framework integrates the Leap Motion Controller for gesture capture, ROS 2 for system communication, and Gazebo for simulation validation. The development process includes systematic testing of gesture recognition accuracy and control precision. The resulting framework demonstrates the feasibility of controlling drones through natural hand gestures, offering an alternative to traditional control methods. Initial simulation results indicate that the system can effectively translate hand movements into drone commands while maintaining flight stability and control precision. This research contributes to the field of human-drone interaction by providing a documented approach to implementing gesture-based control systems, laying groundwork for future developments in accessible drone interfaces."
 authors:
 - family-names: "Achermann"
   given-names: "Yuri"
   orcid: "https://orcid.org/0009-0002-0728-9153"
-title: "px4-offboard-hand-control"
 version: v1.0
 date-released: 2024-11-15
-url: "https://github.com/yuriachermann/Hand-Controlled-PX4-Drone"
+identifiers:
+  - description: This is the Dissertation research project that started the development of the framework
+    type: doi
+    value: "10.5281/zenodo.14286850"
+license: Apache-2.0
+repository-code: "https://github.com/yuriachermann/Hand-Controlled-PX4-Drone"
